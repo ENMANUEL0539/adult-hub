@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contenido</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="js/age-gate.js"></script>
+
+<div id="content"></div>
+
+<script src="js/data.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const item = content.find(c => c.id == params.get("id"));
+
+  document.getElementById("content").innerHTML = `
+    <header>
+      <h1>${item.title}</h1>
+      <p>${item.description}</p>
+    </header>
+    <img src="${item.thumb}" style="width:300px;display:block;margin:auto;filter:blur(8px)">
+    <a class="btn" href="${item.link}" target="_blank">
+      Ver / Descargar en sitio externo
+    </a>
+  `;
+</script>
+</body>
+</html>
