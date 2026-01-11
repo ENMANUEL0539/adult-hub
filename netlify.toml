@@ -1,0 +1,7 @@
+[[headers]]
+for = "/*"
+  [headers.values]
+  X-Frame-Options = "ALLOWALL"
+  Referrer-Policy = "no-referrer"
+  Content-Security-Policy = "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
+
