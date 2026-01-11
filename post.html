@@ -25,7 +25,7 @@
 <script>
 (async () => {
   const link = "https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA";
-  const res = await fetch(`/.netlify/functions/preview?url=${encodeURIComponent(link)}`);
+  const res = await fetch(`functions/preview?url=${encodeURIComponent(link)}`);
   const data = await res.json();
   if (data.image) {
     document.getElementById("preview").src = data.image;
