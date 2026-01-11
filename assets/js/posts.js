@@ -75,7 +75,7 @@ async function loadPost() {
   /* PREVIEW AUTOMÁTICO */
   try {
     const res = await fetch(
-      `/.netlify/functions/preview?url=${encodeURIComponent(post.free)}`
+      `/functions/preview?url=${encodeURIComponent(post.free)}`
     );
     const data = await res.json();
     if (data.image) {
