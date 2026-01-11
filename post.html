@@ -19,8 +19,20 @@
 
   <!-- PREVIEW / IFRAME -->
   <div class="preview-box">
-  <img src="https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA" alt="Preview contenido adulto">
+  <img id="preview" src="/assets/img/loading.jpg">
 </div>
+
+<script>
+(async () => {
+  const link = "https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA";
+  const res = await fetch(`/.netlify/functions/preview?url=${encodeURIComponent(link)}`);
+  const data = await res.json();
+  if (data.image) {
+    document.getElementById("preview").src = data.image;
+  }
+})();
+</script>
+
 
 <div class="buttons">
   <a class="btn primary"
