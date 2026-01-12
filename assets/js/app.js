@@ -65,36 +65,33 @@ function renderPosts(postsToRender) {
 
 // ===== CREATE POST CARD SKELETON =====
 // Crea la estructura HTML de la tarjeta con placeholders
-function createPostCardSkeleton(post) {
-  const card = document.createElement('div');
-  card.className = 'post-card';
-  card.innerHTML = `
-    <div class="post-card-image">
-      <div class="skeleton-loader"></div> <!-- Esqueleto para la imagen -->
-    </div>
-    <div class="post-card-content">
-      <h3 class="post-card-title skeleton-text"></h3> <!-- Esqueleto para el título -->
-      <p class="post-card-description skeleton-text"></p> <!-- Esqueleto para la descripción -->
-      <a href="/post.html?slug=${encodeURIComponent(post.slug)}" class="btn btn-primary">
-        Ver contenido
-      </a>
-    </div>
-  `;
-  return card;
-}
-
-// ===== FETCH AND POPULATE CARD =====
-// Función clave: obtiene los datos de TeraBox y los pinta en la tarjeta
+// Reemplaza la función fetchAndPopulateCard existente por esta
 async function fetchAndPopulateCard(cardElement, postData) {
   try {
     const response = await fetch(`${API_BASE_URL}/preview?url=${encodeURIComponent(postData.teraboxLink)}`);
+
+    // 1. Comprobar si la respuesta es OK (status 200-299)
+    if (!response.ok) {
+      throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+    }
+
+    // 2. Comprobar si el contenido es realmente JSON
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      // Si no es JSON, probablemente es HTML (página de error)
+      const text = await response.text();
+      console.error("Respuesta no JSON recibida:", text.substring(0, 200));
+      throw new Error("El servidor devolvió una página HTML en lugar de datos. ¿Está la función de Netlify bien configurada?");
+    }
+
+    // 3. Si todo está bien, parsear el JSON
     const data = await response.json();
 
     if (!data.success) {
-      throw new Error(data.error || 'Error desconocido');
+      throw new Error(data.error || 'Error desconocido al obtener datos de la API');
     }
 
-    // Actualizar la tarjeta con los datos obtenidos
+    // Actualizar la tarjeta con los datos obtenidos (sin cambios aquí)
     const imageContainer = cardElement.querySelector('.post-card-image');
     imageContainer.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy">`;
 
@@ -108,21 +105,23 @@ async function fetchAndPopulateCard(cardElement, postData) {
 
   } catch (error) {
     console.error(`Error al cargar datos para ${postData.slug}:`, error);
-    // Mostrar un estado de error en la tarjeta
+    // Mostrar un estado de error más informativo en la tarjeta
+     // Mostrar un estado de error en la tarjeta
     const imageContainer = cardElement.querySelector('.post-card-image');
-    imageContainer.innerHTML = `<div class="preview-error"><i class="fas fa-exclamation-triangle"></i><p>Error al cargar</p></div>`;
+    imageContainer.innerHTML = `<div class="preview-error"><i class="fas fa-exclamation-triangle"></i><p>Error de API</p></div>`;
     
     const titleElement = cardElement.querySelector('.post-card-title');
-    titleElement.textContent = postData.customTitle || 'No disponible';
+    titleElement.textContent = postData.customTitle || 'Error al cargar';
     titleElement.classList.remove('skeleton-text');
     
     const descElement = cardElement.querySelector('.post-card-description');
-    descElement.textContent = 'No se pudo cargar la descripción.';
+    descElement.textContent = error.message; // Muestra el error real
     descElement.classList.remove('skeleton-text');
   }
 }
 
-// ===== LOAD POST DETAIL (Página individual) =====
+// Y también la función loadPostDetail
+// ===== LOAD POST DETAIL (Página individual) ====
 async function loadPostDetail() {
   const slug = new URLSearchParams(window.location.search).get('slug');
   if (!slug) { showError('No se especificó ningún contenido.'); return; }
@@ -134,18 +133,29 @@ async function loadPostDetail() {
     const post = posts.find(p => p.slug === slug);
     if (!post) throw new Error('Post not found');
 
-    // 1. Obtener datos del enlace de TeraBox
     const response = await fetch(`${API_BASE_URL}/preview?url=${encodeURIComponent(post.teraboxLink)}`);
+    
+    if (!response.ok) {
+      throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+    }
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Error de configuración de la función en el servidor.");
+    }
+    
+    // 1. Obtener datos del enlace de TeraBox
     const data = await response.json();
     if (!data.success) throw new Error(data.error || 'Error al obtener vista previa');
 
+    // El resto de la función sigue igual...
     // 2. Pintar los datos en la página
     document.title = `${data.title} | Adult Hub`;
     document.getElementById('post-title').textContent = data.title;
     document.getElementById('post-description').textContent = data.description;
     document.getElementById('preview-image').src = data.image;
-
-    // 3. Configurar los botones para que apunten al enlace de TeraBox
+    
+// 3. Configurar los botones para que apunten al enlace de TeraBox
     const teraboxLink = post.teraboxLink;
     document.getElementById('free-link').href = teraboxLink;
     document.getElementById('premium-link').href = teraboxLink;
@@ -156,7 +166,7 @@ async function loadPostDetail() {
   } catch (error) {
     console.error('Error loading post detail:', error);
     hideLoading();
-    showError('No se pudo cargar el contenido. El enlace podría no estar disponible.');
+    showError(`No se pudo cargar el contenido. El enlace podría no estar disponible: ${error.message}`);
   }
 }
 
