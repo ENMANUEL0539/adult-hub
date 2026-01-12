@@ -2,59 +2,132 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title id="post-title">Contenido +18</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Contenido +18 | Adult Hub</title>
+  <meta name="description" content="Contenido exclusivo para adultos en Adult Hub">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="/assets/css/style.css">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" id="og-title" content="Contenido +18 | Adult Hub">
+  <meta property="og:description" id="og-description" content="Contenido exclusivo para adultos">
+  <meta property="og:image" id="og-image" content="/assets/img/logo.png">
+  <meta property="og:type" content="article">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
 </head>
 
 <body>
-<header>
-  <a href="/">⬅ Volver</a>
-</header>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="back-button">
+        <a href="/" class="btn btn-ghost">
+          <i class="fas fa-arrow-left"></i> Volver
+        </a>
+      </div>
+      <div class="logo">
+        <img src="/assets/img/logo.png" alt="Adult Hub Logo">
+        <h1>Adult Hub</h1>
+      </div>
+    </div>
+  </header>
 
-<main>
-  <h1 id="title"></h1>
-  <p id="description"></p>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div id="loading-indicator" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Cargando contenido...</p>
+      </div>
+      
+      <article id="post-content" class="post-detail" style="display: none;">
+        <header class="post-header">
+          <h1 id="post-title"></h1>
+          <div class="post-meta">
+            <span class="post-category" id="post-category"></span>
+            <span class="post-date" id="post-date"></span>
+          </div>
+        </header>
+        
+        <div class="post-body">
+          <p id="post-description"></p>
+          
+          <!-- Preview Section -->
+          <div class="preview-section">
+            <h2>Vista previa</h2>
+            <div class="preview-container">
+              <div id="preview-loading" class="preview-loading">
+                <div class="spinner"></div>
+                <p>Cargando vista previa...</p>
+              </div>
+              <img id="preview-image" src="/assets/img/placeholder.jpg" alt="Vista previa del contenido" style="display: none;">
+              <div id="preview-error" class="preview-error" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>No se pudo cargar la vista previa</p>
+                <button id="retry-preview" class="btn btn-small">Reintentar</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <a id="free-link" class="btn btn-primary" target="_blank" rel="nofollow noopener">
+              <i class="fas fa-download"></i> Ver o Descargar Gratis
+            </a>
+            <a id="premium-link" class="btn btn-secondary" target="_blank" rel="nofollow noopener">
+              <i class="fas fa-crown"></i> Obtener Versión Premium
+            </a>
+          </div>
+          
+          <!-- Additional Info -->
+          <div class="post-info">
+            <h3>Información del contenido</h3>
+            <ul>
+              <li><i class="fas fa-file"></i> Formato: <span id="content-format">Desconocido</span></li>
+              <li><i class="fas fa-database"></i> Tamaño: <span id="content-size">Desconocido</span></li>
+              <li><i class="fas fa-eye"></i> Vistas: <span id="content-views">0</span></li>
+            </ul>
+          </div>
+          
+          <!-- Related Content -->
+          <div class="related-content">
+            <h3>Contenido relacionado</h3>
+            <div id="related-posts" class="related-grid"></div>
+          </div>
+        </div>
+      </article>
+      
+      <div id="error-message" class="error-message" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <h2>Contenido no encontrado</h2>
+        <p>El contenido que buscas no existe o ha sido eliminado.</p>
+        <a href="/" class="btn btn-primary">Volver al inicio</a>
+      </div>
+    </div>
+  </main>
 
-  <!-- PREVIEW / IFRAME -->
-  <div class="preview-box">
-  <img id="preview" src="/assets/img/loading.jpg">
-</div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2023 Adult Hub · Solo +18</p>
+        <div class="social-links">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-<script>
-(async () => {
-  const link = "https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA";
-  const res = await fetch(`/functions/preview?url=${encodeURIComponent(link)}`);
-  const data = await res.json();
-  if (data.image) {
-    document.getElementById("preview").src = data.image;
-  }
-})();
-</script>
-
-
-<div class="buttons">
-  <a class="btn primary"
-     href="https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA"
-     target="_blank" rel="nofollow noopener">
-     📥 Ver o Descargar Gratis en TeraBox
-  </a>
-
-  <a class="btn secondary"
-     href="https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA"
-     target="_blank" rel="nofollow noopener">
-     💳 Comprar pack en TeraBox
-  </a>
-</div>
-
-</main>
-
-<script src="/assets/js/posts.js"></script>
-<script src="/assets/js/tracker.js"></script>
-<script>
-  loadPost();
-</script>
+  <!-- Scripts -->
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/preview.js"></script>
 </body>
 </html>
-
