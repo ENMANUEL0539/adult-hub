@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
-    <loc>https://TU-DOMINIO.netlify.app/</loc>
+    <loc>https://adult-hub.pages.dev/</loc>
+    <lastmod>2023-10-15</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <!-- POSTS -->
-  <url>
-    <loc>https://TU-DOMINIO.netlify.app/post.html?slug=contenido-premium-01</loc>
-    <priority>0.8</priority>
-  </url>
-
+  
+  <!-- Posts will be dynamically added here -->
 </urlset>
-
