@@ -1,5 +1,5 @@
 // ===== GLOBAL VARIABLES =====
-const API_BASE_URL = '/functions';
+const API_BASE_URL = '/.netlify/functions';
 let posts = []; // Almacenará los datos de posts.json
 
 // ===== DOM ELEMENTS =====
