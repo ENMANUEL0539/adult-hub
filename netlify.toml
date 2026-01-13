@@ -1,7 +1,0 @@
-[build]
-  # Esta línea le dice a Netlify dónde están tus funciones
-  functions = "functions"
-
-[build.environment]
-  # Especificamos la versión de Node.js para evitar problemas de compatibilidad
-  NODE_VERSION = "18"
