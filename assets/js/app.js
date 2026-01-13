@@ -1,6 +1,6 @@
 // ===== CONFIGURACIÓN =====
 // ¡IMPORTANTE! Reemplaza esta URL con la de tu backend (Vercel, Render, etc.)
-const API_ENDPOINT = 'https://my-api-terabox.onrender.com'; 
+const API_ENDPOINT = 'https://my-api-terabox.onrender.com/api/preview'; 
 
 // ===== LISTA DE CONTENIDO (AQUÍ AÑADES/QUITAS ENLACES) =====
 const POSTS = [
