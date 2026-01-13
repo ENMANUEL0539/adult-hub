@@ -1,8 +1,8 @@
 // ===== CONFIGURACIÓN =====
-// ¡IMPORTANTE! Reemplaza esta URL con la de tu backend (Vercel, Render, etc.)
-const API_ENDPOINT = 'https://my-api-terabox.onrender.com/api/preview'; 
+const API_ENDPOINT = 'https://my-api-terabox.onrender.com/api/preview';
+const IMAGE_PROXY_ENDPOINT = 'https://my-api-terabox.onrender.com/api/image';
 
-// ===== LISTA DE CONTENIDO (AQUÍ AÑADES/QUITAS ENLACES) =====
+// ===== LISTA DE CONTENIDO =====
 const POSTS = [
   {
     slug: "pack-exclusivo-01",
@@ -10,11 +10,11 @@ const POSTS = [
   },
   {
     slug: "video-premium-01",
-    teraboxLink: "https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA" // Reemplaza con tus enlaces reales
+    teraboxLink: "https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA"
   },
   {
     slug: "galeria-fotos-01",
-    teraboxLink: "https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA" // Reemplaza con tus enlaces reales
+    teraboxLink: "https://1024terabox.com/s/1VUHsbwXsOt7vz1VhH2sIAA"
   }
   // ... añade más posts aquí
 ];
@@ -45,7 +45,6 @@ function denyAge() { window.location.href = 'https://www.google.com'; }
 function initApp() {
   try {
     showLoading();
-    // Ya no necesitamos fetchPosts(), usamos el array POSTS directamente
     renderPosts(POSTS);
     hideLoading();
   } catch (error) {
@@ -100,8 +99,13 @@ async function fetchAndPopulateCard(cardElement, postData) {
     const data = await response.json();
     if (!data.success) throw new Error(data.error || 'Error al obtener datos');
 
+    // Usar el proxy de imágenes para evitar CORB
+    const imageUrl = data.image.includes('placehold.co') ? 
+      data.image : 
+      `${IMAGE_PROXY_ENDPOINT}?url=${encodeURIComponent(data.image)}`;
+
     const imageContainer = cardElement.querySelector('.post-card-image');
-    imageContainer.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy">`;
+    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${data.title}" loading="lazy">`;
 
     const titleElement = cardElement.querySelector('.post-card-title');
     titleElement.textContent = data.title;
@@ -114,7 +118,7 @@ async function fetchAndPopulateCard(cardElement, postData) {
   } catch (error) {
     console.error(`Error al cargar datos para ${postData.slug}:`, error);
     const imageContainer = cardElement.querySelector('.post-card-image');
-    imageContainer.innerHTML = `<div class="preview-error"><i class="fas fa-exclamation-triangle"></i><p>Error al cargar</p></div>`;
+    imageContainer.innerHTML = `<img src="https://placehold.co/600x400@2x.png?text=Error+al+Cargar" alt="Error al cargar">`;
     
     const titleElement = cardElement.querySelector('.post-card-title');
     titleElement.textContent = 'No disponible';
@@ -131,7 +135,6 @@ async function loadPostDetail() {
   const slug = new URLSearchParams(window.location.search).get('slug');
   if (!slug) { showError('No se especificó ningún contenido.'); return; }
 
-  // Buscamos el post en nuestro array POSTS
   const post = POSTS.find(p => p.slug === slug);
   if (!post) { showError('Contenido no encontrado.'); return; }
 
@@ -146,9 +149,14 @@ async function loadPostDetail() {
     document.title = `${data.title} | Adult Hub`;
     document.getElementById('post-title').textContent = data.title;
     document.getElementById('post-description').textContent = data.description;
-    document.getElementById('preview-image').src = data.image;
+    
+    // Usar el proxy de imágenes para evitar CORB
+    const imageUrl = data.image.includes('placehold.co') ? 
+      data.image : 
+      `${IMAGE_PROXY_ENDPOINT}?url=${encodeURIComponent(data.image)}`;
+    
+    document.getElementById('preview-image').src = imageUrl;
 
-    // Ambos botones apuntan al mismo enlace de TeraBox
     const teraboxLink = post.teraboxLink;
     document.getElementById('free-link').href = teraboxLink;
     document.getElementById('premium-link').href = teraboxLink;
