@@ -1,2 +1,5 @@
-Nombre: Content-Security-Policy
-Valor: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: blob: https://adult-hub.pages.dev https://my-api-terabox.onrender.com https://placehold.co https://1024terabox.com https://www.1024terabox.com; connect-src 'self' https://my-api-terabox.onrender.com; font-src 'self' https://cdn.jsdelivr.net; media-src 'self'; object-src 'none'; frame-src 'self'; child-src 'self'; worker-src 'self'; form-action 'self'; base-uri 'self'; manifest-src 'self';
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://adult-hub.pages.dev https://my-api-terabox.onrender.com https://placehold.co https://1024terabox.com https://www.1024terabox.com; connect-src 'self' https://my-api-terabox.onrender.com; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; media-src 'self'; object-src 'none'; frame-src 'self'; child-src 'self'; worker-src 'self'; form-action 'self'; base-uri 'self'; manifest-src 'self';
